@@ -9,6 +9,7 @@ import { initRedis } from './config/redis';
 import { connectDB } from './config/db';
 import { trpcRouter } from './routers/trpc';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
+import { redirectUrl } from './controllers/url.controller';
 const app = express();
 
 app.use(express.json());
@@ -26,6 +27,8 @@ app.use('/trpc',createExpressMiddleware({
     router: trpcRouter,
 }));
 
+
+app.get('/:shortUrl', redirectUrl);
 
 /**
  * Add the error handler middleware
