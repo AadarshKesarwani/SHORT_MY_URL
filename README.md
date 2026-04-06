@@ -57,9 +57,15 @@ REDIS_COUNTER_KEY=short_my_url:counter
 npm install
 ```
 
-2. Ensure MongoDB and Redis are running.
+2. Build the project:
 
-3. Start in development mode:
+```bash
+npm run build
+```
+
+3. Ensure MongoDB and Redis are running.
+
+4. Start in development mode:
 
 ```bash
 npm run dev
@@ -70,6 +76,46 @@ Alternative start command:
 ```bash
 npm start
 ```
+
+## Deploy (Render + MongoDB Atlas + Upstash Redis)
+
+This project is production-ready for Render with MongoDB Atlas and Upstash Redis free tiers.
+
+### 1) Create managed databases
+
+- Create a MongoDB Atlas cluster (M0 Free), then copy your `MONGO_URI`.
+- Create an Upstash Redis database, then copy your Redis URI in `rediss://` format.
+
+### 2) Deploy web service on Render
+
+1. Create a **Web Service** from your GitHub repository.
+2. Configure:
+   - **Build Command**: `npm install --include=dev && npm run build`
+   - **Start Command**: `npm start`
+
+### 3) Add environment variables in Render
+
+```env
+PORT=3000
+BASE_URL=https://short-my-url.onrender.com
+MONGO_URI=<your-atlas-uri>
+REDIS_URI=<your-upstash-rediss-uri>
+REDIS_COUNTER_KEY=short_my_url:counter
+```
+
+> `BASE_URL` must be your live Render domain. Do not use localhost in production.
+
+### 4) Verify deployment
+
+- `GET https://short-my-url.onrender.com/api/v1/ping/`
+- `GET https://short-my-url.onrender.com/api/v1/ping/health`
+- Create a short URL via tRPC and open the generated short link in browser.
+
+## NPM Scripts
+
+- `npm run build` - Compile TypeScript to `dist/`
+- `npm start` - Run compiled server from `dist/server.js`
+- `npm run dev` - Run development server with nodemon
 
 ## API Usage
 
@@ -111,17 +157,3 @@ src/
 - Structured logs using Winston
 - Daily rotating log files
 - Correlation ID support for request tracing
-
-## Current Limitations
-
-- Test suite is not added yet
-- Deployment configuration is not included yet
-- `v2` router is present but currently minimal
-
-## Roadmap
-
-- Add unit and integration tests
-- Add production deployment setup (Docker/CI)
-- Add analytics endpoints
-- Add rate limiting and abuse protection
-- Add custom aliases for short URLs
