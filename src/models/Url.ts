@@ -6,6 +6,7 @@ import mongoose, { Document,Schema } from "mongoose";
 
 //example of the IUrl interface
 export interface IUrl extends Document {
+    _id: mongoose.Types.ObjectId;
     originalUrl: string;
     shortUrl: string;
     clicks: number;
