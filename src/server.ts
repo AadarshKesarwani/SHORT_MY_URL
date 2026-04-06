@@ -7,6 +7,8 @@ import logger from './config/logger.config';
 import { attachCorrelationIdMiddleware } from './middlewares/correlation.middleware';
 import { initRedis } from './config/redis';
 import { connectDB } from './config/db';
+import { trpcRouter } from './routers/trpc';
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
 const app = express();
 
 app.use(express.json());
@@ -18,6 +20,11 @@ app.use(express.json());
 app.use(attachCorrelationIdMiddleware);
 app.use('/api/v1', v1Router);
 app.use('/api/v2', v2Router); 
+
+
+app.use('/trpc',createExpressMiddleware({
+    router: trpcRouter,
+}));
 
 
 /**

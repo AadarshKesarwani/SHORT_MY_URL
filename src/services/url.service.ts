@@ -1,4 +1,3 @@
-import { crea } from 'redis';
 import { serverConfig } from '../config';
 import { CacheRepository } from '../repositories/cache.repository';
 import { toBase62 } from '../utils/base62';
